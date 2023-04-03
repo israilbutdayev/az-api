@@ -1,8 +1,8 @@
 import { Router } from "express";
-const router = Router()
+const list = Router();
 
-router.post("/", (req, res) => {
+list.post("/", (req, res) => {
   res.send("List page");
 });
 
-export default router
+export default list;
