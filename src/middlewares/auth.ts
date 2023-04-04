@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import crypto from "crypto";
-import tokenController from "../controllers/token.js";
+import tokenController from "../controllers/cert.js";
 
 interface session {
   access_token: string;
@@ -26,9 +26,7 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
       }
     }
     next();
-  } catch (error) {
-    
-  }
+  } catch (error) {}
 };
 
 export default auth;

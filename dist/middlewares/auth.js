@@ -1,4 +1,4 @@
-import tokenController from "../controllers/token.js";
+import tokenController from "../controllers/cert.js";
 const sessions = [];
 const auth = async (req, res, next) => {
     try {
@@ -10,7 +10,6 @@ const auth = async (req, res, next) => {
         }
         next();
     }
-    catch (error) {
-    }
+    catch (error) { }
 };
 export default auth;
