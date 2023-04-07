@@ -21,6 +21,7 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const body: body = req.body;
     const { token, access_token, asanMob, asanId, userId, password2, password1 } = body;
+    let token_t;
     let loggedin = false;
     if (token) {
       const validToken = await tokenController(token);
@@ -33,18 +34,24 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
       session = sessions.find(s => s.access_token === access_token)
     }
     if(session){
-      token = session.token
+      token_t = session.token
     }
     
-    if (!loggedIn) {
+    if (!loggedin) {
       if (true)
         userLogin(userId, password2, password1)
     }
-    if (!loggedIn){
+    if (!loggedin){
       asanLogin(asanMob, asanId)
     }
     next();
   } catch (error) {}
 };
 
+async function asanLogin(asanMob: string|null, asanId: string|null) {
+  
+}
+async function userLogin(userId:string|null, password2: string|null, password1: string|null) {
+  
+}
 export default auth;
