@@ -1,5 +1,4 @@
-const tokenController = async (token) => {
-    const url = "";
+const tokenController = async () => {
     return false;
 };
 export default tokenController;
