@@ -2,7 +2,7 @@
   "type": "module",
   "scripts": {
     "build": "npx tsc",
-    "start": "node dist/app.js",
+    "start": "node dist/index.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
     "heroku-prebuild": "npm i -f",
     "heroku-postbuild": "npm run build"
