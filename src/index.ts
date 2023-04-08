@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.use("/api", api);
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
+  res.send("APP");
 });
 
 app.listen(port, () => {
