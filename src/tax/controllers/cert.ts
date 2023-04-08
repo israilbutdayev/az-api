@@ -6,27 +6,20 @@ interface cert {
   certId: string;
 }
 
-interface resp {
-  response: {
-    code: string;
-    message: string;
-  };
-  token: string;
+interface response {
   certList: cert[];
 }
 
-const tokenController = async (token: string) => {
+const cert_list = async (token: string): Promise<response> => {
   const url = "https://qaime.e-taxes.gov.az/service/eroom.getCertList";
-  const response: resp = await (
+  const response = await (
     await axios.get(url, {
       headers: {
         Cookie: "token=" + token,
       },
     })
   ).data;
-  if (response.response.code === "0" && response.response.message === "ok") {
-    return response;
-  }
-  return false;
+  const certs = response.certList.filter((c: cert) => c.voen !== "");
+  return { certList: certs };
 };
-export default tokenController;
+export default cert_list;
