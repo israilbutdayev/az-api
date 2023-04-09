@@ -5,7 +5,7 @@ const get_currencies = async (req, res) => {
     const { from_date, to_date, currency } = {
         from_date: "01/01/2023",
         to_date: "31/12/2023",
-        currency: "usd",
+        currencies: [],
         ...req_body,
     };
     // axios.defaults.proxy = {
