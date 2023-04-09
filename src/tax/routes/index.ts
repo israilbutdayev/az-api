@@ -1,6 +1,6 @@
-import { Router } from "express";
+import { Router, Response, NextFunction } from "express";
 import { asyncMiddleware } from "middleware-async";
-import auth from "../middlewares/auth.js";
+import auth, { Request_extended } from "../middlewares/auth.js";
 import list from "./list.js";
 import doc from "./doc.js";
 const api = Router();

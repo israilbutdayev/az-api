@@ -1,2 +1,4 @@
-const get = async () => { };
-export default get;
+const list = async (req, res) => {
+    res.send("List page");
+};
+export default list;
