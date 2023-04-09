@@ -5,7 +5,7 @@ import jsdom from "jsdom";
 interface params {
   from_date: string;
   to_date: string;
-  currency: string;
+  currencies: string[];
 }
 
 const get_currencies = async (req: Request, res: Response) => {
@@ -13,7 +13,7 @@ const get_currencies = async (req: Request, res: Response) => {
   const { from_date, to_date, currency }: params = {
     from_date: "01/01/2023",
     to_date: "31/12/2023",
-    currency: "usd",
+    currencies: [],
     ...req_body,
   };
   // axios.defaults.proxy = {
