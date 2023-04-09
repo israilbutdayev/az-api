@@ -35,6 +35,7 @@ list.post("/", async (req, res) => {
         if (token && !token_provided && user_type === "userType_2") {
             console.log("f");
             await logout(token);
+            //
         }
     }
     res.json({ inboxList: output });
