@@ -88,6 +88,9 @@ const auth = async (
               next();
             }
           } else {
+            for (let i = 0; i < 24; i++){
+              const resp = await asan_login(asanMob, asanId, false, session.oid)
+            }
             res.json({
               success: true,
               error: false,
