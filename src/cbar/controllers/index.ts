@@ -7,6 +7,7 @@ interface params {
   to_date: string;
   currencies: string[];
 }
+
 // axios.defaults.proxy = {
 //   protocol: "http",
 //   host: "localhost",
