@@ -10,6 +10,7 @@ interface session {
   token?: string;
   oid?: string;
   code?: string;
+  running?: boolean;
 }
 export interface Request_extended extends Request {
   user_data?: {
@@ -69,6 +70,7 @@ const auth = async (
             req.user_data = data;
             req.user_data.token_provided = true;
             logged_in = true;
+            session.running = false;
             next();
           }
         } else if (session.oid && asanMob && asanId) {
@@ -80,33 +82,24 @@ const auth = async (
           );
           if (response.token) {
             session.token = response.token;
+            session.running = false;
             const data = await token_controller(response.token);
             if (data.valid) {
               req.user_data = data;
               req.user_data.token_provided = true;
               logged_in = true;
+              session.running = false;
               next();
+              return;
             }
-          } else {
-            const resp = await asan_login(asanMob, asanId, false, session.oid);
-            if (resp.valid && resp.retry) {
-              res.json({
-                success: true,
-                error: false,
-                retry: true,
-                access_token: session.access_token,
-                token: null,
-                data: {},
-              });
-            } else if (resp.valid && !resp.retry && resp.token) {
-              const data = await token_controller(resp.token);
-              if (data.valid) {
-                req.user_data = data;
-                req.user_data.token_provided = true;
-                logged_in = true;
-                next();
-              }
-            }
+          } else if (response.valid && response.retry) {
+            res.json({
+              success: true,
+              error: false,
+              retry: true,
+              access_token: session.access_token,
+            });
+            return;
           }
         }
       }
@@ -144,6 +137,7 @@ const auth = async (
           access_token,
           code,
         });
+        return;
       }
     } else if (!logged_in) {
       res.json({

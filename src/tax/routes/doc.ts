@@ -4,7 +4,6 @@ import { Request_extended } from "../middlewares/auth.js";
 const doc = Router();
 
 doc.post("/", async (req: Request_extended, res: Response) => {
-  console.log("b");
   const user_data = req.user_data;
   const token = user_data?.token;
   const url = "https://qaime.e-taxes.gov.az/service/eqaime.printQaime";

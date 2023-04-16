@@ -27,6 +27,7 @@ const auth = async (req, res, next) => {
                         req.user_data = data;
                         req.user_data.token_provided = true;
                         logged_in = true;
+                        session.running = false;
                         next();
                     }
                 }
@@ -34,35 +35,25 @@ const auth = async (req, res, next) => {
                     const response = await asan_login(asanMob, asanId, false, session.oid);
                     if (response.token) {
                         session.token = response.token;
+                        session.running = false;
                         const data = await token_controller(response.token);
                         if (data.valid) {
                             req.user_data = data;
                             req.user_data.token_provided = true;
                             logged_in = true;
+                            session.running = false;
                             next();
+                            return;
                         }
                     }
-                    else {
-                        const resp = await asan_login(asanMob, asanId, false, session.oid);
-                        if (resp.valid && resp.retry) {
-                            res.json({
-                                success: true,
-                                error: false,
-                                retry: true,
-                                access_token: session.access_token,
-                                token: null,
-                                data: {},
-                            });
-                        }
-                        else if (resp.valid && !resp.retry && resp.token) {
-                            const data = await token_controller(resp.token);
-                            if (data.valid) {
-                                req.user_data = data;
-                                req.user_data.token_provided = true;
-                                logged_in = true;
-                                next();
-                            }
-                        }
+                    else if (response.valid && response.retry) {
+                        res.json({
+                            success: true,
+                            error: false,
+                            retry: true,
+                            access_token: session.access_token,
+                        });
+                        return;
                     }
                 }
             }
@@ -100,6 +91,7 @@ const auth = async (req, res, next) => {
                     access_token,
                     code,
                 });
+                return;
             }
         }
         else if (!logged_in) {

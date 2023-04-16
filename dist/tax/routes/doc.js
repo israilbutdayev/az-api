@@ -2,7 +2,6 @@ import axios from "axios";
 import { Router } from "express";
 const doc = Router();
 doc.post("/", async (req, res) => {
-    console.log("b");
     const user_data = req.user_data;
     const token = user_data?.token;
     const url = "https://qaime.e-taxes.gov.az/service/eqaime.printQaime";
