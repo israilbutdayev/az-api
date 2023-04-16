@@ -4,13 +4,18 @@ import token_controller from "../controllers/token.js";
 import user_login from "../controllers/userLogin.js";
 import asan_login from "../controllers/asanLogin.js";
 import sleep from "../utils/sleep.js";
+// import { filter_shape } from "../routes/list.js";
 
 interface session {
-  access_token: string;
   token?: string;
   oid?: string;
   code?: string;
+  asanMob: string;
+  asanId: string;
   running?: boolean;
+  userId?: string;
+  password2?: string;
+  password1?: string;
 }
 export interface Request_extended extends Request {
   user_data?: {
@@ -24,13 +29,13 @@ export interface Request_extended extends Request {
 }
 
 interface body {
-  access_token: string | null;
   token: string | null;
   asanMob: string | null;
   asanId: string | null;
   userId: string | null;
   password2: string | null;
   password1: string | null;
+  filters: string[];
 }
 const sessions: session[] = [];
 
@@ -42,15 +47,15 @@ const auth = async (
   try {
     let logged_in = false;
     const body: body = req.body;
-    const {
-      token,
-      access_token,
-      asanMob,
-      asanId,
-      userId,
-      password2,
-      password1,
-    } = body;
+    const { token, asanMob, asanId, userId, password2, password1, filters } =
+      body;
+    if (!filters || !filters?.length) {
+      return res.json({
+        success: false,
+        error: true,
+        message: "Axtarış parametrləri daxil edilməyib.",
+      });
+    }
     if (token) {
       const data = await token_controller(token);
       if (data.valid) {
@@ -60,8 +65,10 @@ const auth = async (
         next();
       }
     }
-    if (!logged_in && access_token) {
-      let session = sessions.find((s) => s.access_token === access_token);
+    if (!logged_in) {
+      let session = sessions.find(
+        (s) => s.asanMob === asanMob && s.asanId === asanId
+      );
       if (session) {
         let t_token = session.token;
         if (t_token) {
@@ -89,17 +96,21 @@ const auth = async (
               req.user_data.token_provided = true;
               logged_in = true;
               session.running = false;
-              next();
-              return;
+              return next();
             }
-          } else if (response.valid && response.retry) {
-            res.json({
-              success: true,
-              error: false,
-              retry: true,
-              access_token: session.access_token,
-            });
-            return;
+          } else if (response.valid) {
+            if (response.retry) {
+              return res.json({
+                success: true,
+                error: false,
+                retry: true,
+                asanMob,
+                asanId,
+              });
+            }
+          } else if (!response.valid) {
+            const index = sessions.findIndex((s) => s === session);
+            sessions.splice(index, 1);
           }
         }
       }
@@ -123,21 +134,19 @@ const auth = async (
       const data = await asan_login(asanMob, asanId, true);
       if (data.valid) {
         const { oid, code } = data;
-        const access_token = crypto.randomBytes(20).toString("hex");
         const session: session = {
-          access_token,
           oid,
           code,
+          asanMob,
+          asanId,
         };
         sessions.push(session);
-        res.json({
+        return res.json({
           success: true,
           error: false,
           retry: true,
-          access_token,
           code,
         });
-        return;
       }
     } else if (!logged_in) {
       res.json({
