@@ -1,10 +1,10 @@
 import axios from "axios";
 import jsdom from "jsdom";
-// axios.defaults.proxy = {
-//   protocol: "http",
-//   host: "localhost",
-//   port: 8866,
-// };
+axios.defaults.proxy = {
+    protocol: "http",
+    host: "localhost",
+    port: 8866,
+};
 const get_currencies = async (req, res) => {
     const req_body = req.body;
     const { from_date, to_date, currencies } = {

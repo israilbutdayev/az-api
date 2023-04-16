@@ -5,6 +5,7 @@ import cert_list from "../controllers/cert.js";
 const list = Router();
 list.post("/", async (req, res) => {
     const user_data = req.user_data;
+    console.log(user_data);
     const token = user_data?.token;
     const user_type = user_data?.userType;
     const token_provided = user_data?.token_provided;
@@ -16,12 +17,12 @@ list.post("/", async (req, res) => {
     const url = "https://qaime.e-taxes.gov.az/service/eqaime.getInboxVHF";
     if (token && user_type === "userType_1") {
         const { certList } = await cert_list(token);
-        const url = `https://qaime.e-taxes.gov.az/service/eyeks.changeUserType`;
+        const cert_url = `https://qaime.e-taxes.gov.az/service/eyeks.changeUserType`;
         for (let i = 0; i < certList?.length; i++) {
             const cert = certList[i];
             const orgId = cert.voen;
-            const data = `orgId=${orgId}`;
-            const response = await axios.post(url, data);
+            const cert_data = `orgId=${orgId}`;
+            const response = await axios.post(cert_url, cert_data);
             if (response.data.response.message === "ok") {
                 const response = await axios.post(url, payload);
                 output.push(...response?.data?.inboxList);

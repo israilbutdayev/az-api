@@ -88,17 +88,25 @@ const auth = async (
               next();
             }
           } else {
-            for (let i = 0; i < 24; i++){
-              const resp = await asan_login(asanMob, asanId, false, session.oid)
+            const resp = await asan_login(asanMob, asanId, false, session.oid);
+            if (resp.valid && resp.retry) {
+              res.json({
+                success: true,
+                error: false,
+                retry: true,
+                access_token: session.access_token,
+                token: null,
+                data: {},
+              });
+            } else if (resp.valid && !resp.retry && resp.token) {
+              const data = await token_controller(resp.token);
+              if (data.valid) {
+                req.user_data = data;
+                req.user_data.token_provided = true;
+                logged_in = true;
+                next();
+              }
             }
-            res.json({
-              success: true,
-              error: false,
-              retry: true,
-              access_token: session.access_token,
-              token: null,
-              data: {},
-            });
           }
         }
       }
