@@ -8,11 +8,11 @@ interface params {
   currencies: string[];
 }
 
-axios.defaults.proxy = {
-  protocol: "http",
-  host: "localhost",
-  port: 8866,
-};
+// axios.defaults.proxy = {
+//   protocol: "http",
+//   host: "localhost",
+//   port: 8866,
+// };
 
 const get_currencies = async (req: Request, res: Response) => {
   const req_body = req.body;
@@ -66,10 +66,9 @@ const get_currencies = async (req: Request, res: Response) => {
       );
     }
   }
-  res.json({
+  return res.json({
     success: true,
     error: false,
-    message: "Məlumat tapılmadı.",
     data,
   });
 };

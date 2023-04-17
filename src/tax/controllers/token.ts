@@ -1,9 +1,9 @@
 import axios from "axios";
-axios.defaults.proxy = {
-  protocol: "http",
-  host: "localhost",
-  port: 8866,
-};
+// axios.defaults.proxy = {
+//   protocol: "http",
+//   host: "localhost",
+//   port: 8866,
+// };
 export interface response {
   valid: boolean;
   token?: string;

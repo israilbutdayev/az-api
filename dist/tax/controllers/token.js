@@ -1,9 +1,4 @@
 import axios from "axios";
-axios.defaults.proxy = {
-    protocol: "http",
-    host: "localhost",
-    port: 8866,
-};
 const token_controller = async (token) => {
     for (let i = 0; i < 10; i++) {
         try {
