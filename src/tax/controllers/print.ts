@@ -34,7 +34,7 @@ export async function print(data: string) {
     outer: for (let j = 1; j <= 10; j++) {
       const u_bound = 100 + j * 5;
       const l_bound = 100 - j * 5;
-      inner: for (let s = u_bound; s >= l_bound; s--) {
+      for (let s = u_bound; s >= l_bound; s--) {
         const cur_scale = s / 100;
         if (scales.some((d) => d.scale === cur_scale)) {
           continue;
