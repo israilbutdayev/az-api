@@ -5,7 +5,8 @@ const print_router = Router();
 print_router.post("/", async (req, res) => {
   const body = req.body;
   const pdf = await print(body);
-  res.sendFile(pdf);
+  res.type("application/pdf");
+  res.send(pdf);
 });
 
 export default print_router;
