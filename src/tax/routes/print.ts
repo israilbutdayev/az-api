@@ -4,7 +4,7 @@ const print_router = Router();
 
 print_router.post("/", async (req, res) => {
   const body = req.body;
-  const pdf = await print(body);
+  const pdf = await print(body.content);
   res.type("application/pdf");
   res.send(pdf);
 });
