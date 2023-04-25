@@ -1,10 +1,12 @@
 import { Router } from "express";
 import { asyncMiddleware } from "middleware-async";
 import auth from "../middlewares/auth.js";
+import print from "./print.js";
 import list from "./list.js";
 import doc from "./doc.js";
 const api = Router();
 api.use(asyncMiddleware(auth));
 api.use("/list", list);
 api.use("/doc", doc);
+api.use("/print", print);
 export default api;
