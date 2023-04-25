@@ -91,6 +91,7 @@ list.post("/", async (req, res) => {
                 if (orgId) {
                     for (let j = 0; j < filters.length; j++) {
                         const filter = filters[j];
+                        const box = filter.box;
                         const payload = Object.keys(f)
                             .map((k) => `${k}=${filter[k] || ""}`)
                             .join("&");
