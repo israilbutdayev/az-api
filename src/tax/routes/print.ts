@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { print } from "../controllers/print";
+import { print } from "../controllers/print.js";
 const print_router = Router();
 
 print_router.post("/", async (req, res) => {
