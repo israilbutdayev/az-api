@@ -15,10 +15,11 @@ export async function print(data: string) {
     timeout: 0,
   };
   try {
-    const browser = await puppeteer.launch();
+    const html = b64DecodeUnicode(data)
+    const browser = await puppeteer.launch({headless: 'new'});
     const page = await browser.newPage();
     await page.goto("https://www.example.com");
-    await page.setContent(data, {
+    await page.setContent(html, {
       waitUntil: "domcontentloaded",
     });
     await page.emulateMediaType("screen");
@@ -80,6 +81,13 @@ export async function print(data: string) {
     await browser.close();
     return pdf;
   } catch (error) {
+    console.log(error)
     return;
   }
+  function b64DecodeUnicode (str:string) {
+    /*// Going backwards: from bytestream, to percent-encoding, to original string.*/
+    return decodeURIComponent(atob(str).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+};
 }
