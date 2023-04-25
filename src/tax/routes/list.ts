@@ -29,8 +29,13 @@ const f = {
 };
 
 const orgIds: string[] = ["2003608012"];
-
-const boxes = {
+interface box_shape {
+  [box: string]: {
+    path: string;
+    resp: string;
+  };
+}
+const boxes: box_shape = {
   inbox: {
     path: "getInboxVHF",
     resp: "inboxList",
@@ -96,6 +101,7 @@ list.post("/", async (req: Request_extended, res: Response) => {
         if (orgId) {
           for (let j = 0; j < filters.length; j++) {
             const filter = filters[j];
+            const box: string = filter.box;
             const payload = Object.keys(f)
               .map((k) => `${k}=${filter[k] || ""}`)
               .join("&");
