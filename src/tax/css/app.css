@@ -1,0 +1,77 @@
+.imzaText {
+    font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+    font-size: 12px;
+}
+
+.pechatText {
+    font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.basliqText {
+    font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.tbHeader {
+    font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+    font-size: 12px;
+}
+
+.tbItalicHeader {
+    font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.tbData {
+    font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+    font-size: 12px;
+    text-align: right;
+    display: block;
+}
+
+.tbDataLeft {
+    font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+    font-size: 12px;
+    text-align: justify;
+    display: block;
+}
+
+.tbDataCenter {
+    font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+    font-size: 12px;
+    text-align: center;
+    display: block;
+}
+
+.tbYekunData {
+    font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+    text-align: right;
+    display: block;
+}
+
+.tbYekunDataCenter {
+    font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+    text-align: center;
+    display: block;
+}
+
+.tbYekunDataLeft {
+    font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+    text-align: justify;
+    display: block;
+}
+
+.teqdimData {
+    font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+    font-size: 12px;
+}

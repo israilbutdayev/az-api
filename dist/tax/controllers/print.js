@@ -14,11 +14,10 @@ export async function print(body) {
         timeout: 0,
     };
     try {
-        console.log(body);
         const { type, content, options: { fit } } = body;
         let html;
         if (type === 'base64') {
-            html = b64DecodeUnicode(content);
+            html = Buffer.from(content, 'base64').toString('utf-8');
         }
         else {
             html = content;
@@ -30,7 +29,7 @@ export async function print(body) {
             waitUntil: "domcontentloaded",
         });
         await page.emulateMediaType("screen");
-        await page.addStyleTag({ path: "./app.css" });
+        await page.addStyleTag({ path: "./src/tax/css/app.css" });
         let scale = 1;
         if (fit) {
             const pdf = await page.pdf({ ...printOptions });
@@ -91,11 +90,4 @@ export async function print(body) {
         console.log(error);
         return;
     }
-    function b64DecodeUnicode(str) {
-        /*// Going backwards: from bytestream, to percent-encoding, to original string.*/
-        return decodeURIComponent(atob(str).split('').map(function (c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-    }
-    ;
 }
