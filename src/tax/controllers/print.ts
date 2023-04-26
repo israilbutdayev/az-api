@@ -1,11 +1,11 @@
 import puppeteer, { PDFOptions } from "puppeteer";
 import pdfjs from "pdfjs-dist/legacy/build/pdf.js";
 interface body {
-  type: string,
-  content: string,
+  type: string;
+  content: string;
   options: {
-    fit: boolean
-  }
+    fit: boolean;
+  };
 }
 export async function print(body: body) {
   const printOptions: PDFOptions = {
@@ -21,14 +21,18 @@ export async function print(body: body) {
     timeout: 0,
   };
   try {
-    const { type, content, options: { fit } } = body
+    const {
+      type,
+      content,
+      options: { fit },
+    } = body;
     let html: string;
-    if (type === 'base64') {
-      html = Buffer.from(content, 'base64').toString('utf-8')
+    if (type === "base64") {
+      html = Buffer.from(content, "base64").toString("utf-8");
     } else {
-      html = content
+      html = content;
     }
-    const browser = await puppeteer.launch({ headless: 'new' });
+    const browser = await puppeteer.launch({ headless: "new" });
     const page = await browser.newPage();
     await page.goto("https://www.example.com");
     await page.setContent(html, {
@@ -36,6 +40,27 @@ export async function print(body: body) {
     });
     await page.emulateMediaType("screen");
     await page.addStyleTag({ path: "./src/tax/css/app.css" });
+    const seller = await page
+      .$("body > p:nth-child(4) > span:nth-child(2)")
+      .then((el_handle) => el_handle?.evaluate((el) => el.textContent))
+      .catch();
+    const buyer = await page
+      .$("body > p:nth-child(4) > span:nth-child(5)")
+      .then((el_handle) => el_handle?.evaluate((el) => el.textContent))
+      .catch();
+    const date = await page
+      .$("body > div:nth-child(2) > span:nth-child(8)")
+      .then((el_handle) => el_handle?.evaluate((el) => el.textContent))
+      .catch();
+    const ser = await page
+      .$("body > div:nth-child(2) > span:nth-child(5)")
+      .then((el_handle) => el_handle?.evaluate((el) => el.textContent))
+      .catch();
+    const num = await page
+      .$("body > div:nth-child(2) > span:nth-child(7)")
+      .then((el_handle) => el_handle?.evaluate((el) => el.textContent))
+      .catch();
+    const filename = `${seller} -> ${buyer} @ ${date} ${ser} ${num}`;
     let scale = 1;
     if (fit) {
       const pdf = await page.pdf({ ...printOptions });
@@ -90,10 +115,11 @@ export async function print(body: body) {
       }
     }
     const pdf = await page.pdf({ ...printOptions, scale });
+    const size = Buffer.byteLength(pdf);
     await browser.close();
-    return pdf;
+    return { size, filename, pdf };
   } catch (error) {
-    console.log(error)
-    return;
+    console.log(error);
+    return { size: "", filename: "", pdf: "" };
   }
 }
