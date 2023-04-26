@@ -1,7 +1,6 @@
 import puppeteer from "puppeteer";
 import pdfjs from "pdfjs-dist/legacy/build/pdf.js";
-export async function print(data) {
-    const fit = true;
+export async function print(body) {
     const printOptions = {
         margin: {
             top: "40px",
@@ -15,7 +14,15 @@ export async function print(data) {
         timeout: 0,
     };
     try {
-        const html = b64DecodeUnicode(data);
+        console.log(body);
+        const { type, content, options: { fit } } = body;
+        let html;
+        if (type === 'base64') {
+            html = b64DecodeUnicode(content);
+        }
+        else {
+            html = content;
+        }
         const browser = await puppeteer.launch({ headless: 'new' });
         const page = await browser.newPage();
         await page.goto("https://www.example.com");
