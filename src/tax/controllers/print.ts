@@ -1,7 +1,13 @@
 import puppeteer, { PDFOptions } from "puppeteer";
 import pdfjs from "pdfjs-dist/legacy/build/pdf.js";
-export async function print(data: string) {
-  const fit = true;
+interface body {
+  type: string,
+  content: string,
+  options: {
+    fit: boolean
+  }
+}
+export async function print(body: body) {
   const printOptions: PDFOptions = {
     margin: {
       top: "40px",
@@ -15,8 +21,15 @@ export async function print(data: string) {
     timeout: 0,
   };
   try {
-    const html = b64DecodeUnicode(data)
-    const browser = await puppeteer.launch({headless: 'new'});
+    console.log(body)
+    const { type, content, options: { fit } } = body
+    let html: string;
+    if (type === 'base64') {
+      html = b64DecodeUnicode(content)
+    } else {
+      html = content
+    }
+    const browser = await puppeteer.launch({ headless: 'new' });
     const page = await browser.newPage();
     await page.goto("https://www.example.com");
     await page.setContent(html, {
@@ -84,10 +97,10 @@ export async function print(data: string) {
     console.log(error)
     return;
   }
-  function b64DecodeUnicode (str:string) {
+  function b64DecodeUnicode(str: string) {
     /*// Going backwards: from bytestream, to percent-encoding, to original string.*/
-    return decodeURIComponent(atob(str).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    return decodeURIComponent(atob(str).split('').map(function (c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
-};
+  };
 }
